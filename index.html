@@ -20,7 +20,7 @@ button{width:100%;border:0;border-radius:11px;padding:13px;font-size:16px;font-w
 button.secondary{background:#e5e7eb}.result{display:none}.big{font-size:28px;font-weight:800}.muted{color:var(--muted);font-size:13px}.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eee;padding:9px 0}.row:last-child{border:0}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#ecfdf5;color:var(--ok);font-weight:700;font-size:12px}.warn{background:#fff7ed;color:#9a3412}.danger{background:#fef2f2;color:var(--bad)}.note{font-size:12px;line-height:1.5;color:#4b5563}.hidden{display:none}
 @media(max-width:600px){.grid3{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
 .header-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.header-actions button{margin-top:12px;padding:10px;font-size:14px}.header-actions .secondary{background:#374151;color:white}
-.manual-link{display:inline-block;padding:12px 16px;border-radius:11px;background:var(--accent);color:#111827;font-weight:750;text-decoration:none}
+.manual-viewer-wrap{margin-top:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#f9fafb}.manual-viewer-wrap object{display:block;width:100%;min-height:700px;background:white}
 </style>
 </head>
 <body>
@@ -83,9 +83,13 @@ button.secondary{background:#e5e7eb}.result{display:none}.big{font-size:28px;fon
 
 <section class="card" id="manual">
 <h2>📘 ABNT NBR 5410 — Instalações elétricas de baixa tensão</h2>
-<p>Consulte a edição vigente da norma para verificar os requisitos aplicáveis ao projeto e à execução de instalações elétricas de baixa tensão, incluindo proteção contra choques e sobrecorrentes, dimensionamento de condutores, queda de tensão, aterramento e seleção dos componentes.</p>
-<p class="note">O texto integral é protegido por direitos autorais e não está reproduzido neste aplicativo. O acesso à norma depende das condições da plataforma externa. Os resultados desta calculadora são apenas referências simplificadas e não substituem a verificação da edição vigente por profissional qualificado.</p>
-<a class="manual-link" href="https://www.normas.com.br/visualizar/abnt-nbr-nm/23327/abnt-nbr5410-instalacoes-eletricas-de-baixa-tensao" target="_blank" rel="noopener noreferrer">Consultar ABNT NBR 5410 na Target Normas</a>
+<p>Consulte diretamente o PDF local da edição vigente da norma para verificar os requisitos aplicáveis ao projeto e à execução de instalações elétricas de baixa tensão, incluindo proteção contra choques e sobrecorrentes, dimensionamento de condutores, queda de tensão, aterramento e seleção dos componentes.</p>
+<p class="note">O texto integral é protegido por direitos autorais e não está reproduzido neste aplicativo. Os resultados desta calculadora são apenas referências simplificadas e não substituem a verificação da edição vigente por profissional qualificado.</p>
+<div class="manual-viewer-wrap">
+  <object id="manualViewer" data="./NBR5410.pdf" type="application/pdf" aria-label="Visualizador da ABNT NBR 5410">
+    <p class="note">O arquivo local da norma não foi encontrado. Coloque o PDF em <strong>./NBR5410.pdf</strong> na pasta do aplicativo para ativar a consulta direta.</p>
+  </object>
+</div>
 </section>
 
 <section class="card">
