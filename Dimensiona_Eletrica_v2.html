@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="Calculadora rápida de dimensionamento de circuitos elétricos.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Dimensiona Elétrica</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#d1d5db;--accent:#f59e0b;--ok:#166534;--bad:#991b1b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text)}
+header{background:#111827;color:white;padding:18px 16px;position:sticky;top:0;z-index:5}header h1{margin:0;font-size:21px}header p{margin:4px 0 0;color:#d1d5db;font-size:13px}
+main{max-width:850px;margin:auto;padding:14px}.card{background:var(--card);border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px #00000008}
+h2{font-size:17px;margin:0 0 12px}label{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:white;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+button{width:100%;border:0;border-radius:11px;padding:13px;font-size:16px;font-weight:750;cursor:pointer;background:var(--accent);color:#111827;margin-top:14px}
+button.secondary{background:#e5e7eb}.result{display:none}.big{font-size:28px;font-weight:800}.muted{color:var(--muted);font-size:13px}.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eee;padding:9px 0}.row:last-child{border:0}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#ecfdf5;color:var(--ok);font-weight:700;font-size:12px}.warn{background:#fff7ed;color:#9a3412}.danger{background:#fef2f2;color:var(--bad)}.note{font-size:12px;line-height:1.5;color:#4b5563}.hidden{display:none}
+@media(max-width:600px){.grid3{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
+.header-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.header-actions button{margin-top:12px;padding:10px;font-size:14px}.header-actions .secondary{background:#374151;color:white}
+.manual-link{display:inline-block;padding:12px 16px;border-radius:11px;background:var(--accent);color:#111827;font-weight:750;text-decoration:none}
+</style>
+</head>
+<body>
+<header><h1>⚡ Dimensiona Elétrica</h1><p>Calculadora rápida de dimensionamento de circuitos</p><div class="header-actions"><button class="secondary" onclick="document.getElementById('manual').scrollIntoView({behavior:'smooth'})">Consultar NBR 5410</button><button id="installButton" onclick="instalarApp()">Instalar aplicativo</button></div></header>
+<main>
+<section class="card">
+<h2>1. Dados do circuito</h2>
+<div class="grid">
+<div><label>Tipo</label><select id="tipo"><option value="ilum">Iluminação</option><option value="tug">TUG</option><option value="tue">TUE / equipamento</option><option value="chuveiro">Chuveiro</option><option value="ar">Ar-condicionado</option><option value="motor">Motor</option><option value="outro">Outro</option></select></div>
+<div><label>Sistema</label><select id="sistema"><option value="mono">Monofásico</option><option value="bi">Bifásico</option><option value="tri">Trifásico</option></select></div>
+</div>
+<div class="grid3">
+<div><label>Potência (W)</label><input id="pot" type="number" min="0" step="1" placeholder="6800"></div>
+<div><label>Tensão (V)</label><input id="volt" type="number" min="1" step="1" value="220"></div>
+<div><label>Comprimento (m)</label><input id="dist" type="number" min="0" step="0.1" value="20"></div>
+</div>
+<div class="grid">
+<div><label>Fator de potência</label><input id="fp" type="number" min="0.1" max="1" step="0.01" value="1"></div>
+<div><label>Queda máxima (%)</label><input id="quedaMax" type="number" min="0.1" max="20" step="0.1" value="4"></div>
+</div>
+</section>
+
+<section class="card">
+<h2>2. Condutores e instalação</h2>
+<div class="grid">
+<div><label>Método de instalação</label><select id="metodo"><option value="B1">B1 — condutores em eletroduto</option><option value="C">C — cabos sobre parede / equivalente</option></select></div>
+<div><label>Condutores carregados</label><select id="carreg"><option value="2">2</option><option value="3">3</option></select></div>
+</div>
+<div class="grid">
+<div><label>Isolação</label><select id="isol"><option value="PVC">PVC — 70 °C</option><option value="XLPE">XLPE/EPR — 90 °C</option></select></div>
+<div><label>Temperatura ambiente (°C)</label><input id="temp" type="number" value="30" min="10" max="60"></div>
+</div>
+<div class="grid">
+<div><label>Agrupamento</label><select id="agrup"><option value="1">1 circuito</option><option value="0.8">2 circuitos</option><option value="0.7">3 circuitos</option><option value="0.65">4-5 circuitos</option></select></div>
+<div><label>Comprimento total do circuito (m)</label><input id="dist2" type="number" min="0" step="0.1" value="20"></div>
+</div>
+<div class="grid">
+<div><label>Fator de correção total</label><input id="fator" type="number" min="0.1" max="1" step="0.01" value="1"></div>
+<div><label>Material</label><select id="material"><option value="cu">Cobre</option><option value="al">Alumínio</option></select></div>
+</div>
+<p class="note">O fator de correção deve representar temperatura, agrupamento e demais condições aplicáveis. A tabela interna é uma referência simplificada; confirme o método e as condições reais da instalação antes de executar.</p>
+<button onclick="calcular()">CALCULAR DIMENSIONAMENTO</button>
+</section>
+
+<section class="card result" id="resultado">
+<h2>3. Resultado</h2>
+<div id="status"></div>
+<div class="row"><span>Corrente de projeto</span><strong id="ib"></strong></div>
+<div class="row"><span>Seção por capacidade</span><strong id="secAmp"></strong></div>
+<div class="row"><span>Seção por queda de tensão</span><strong id="secQueda"></strong></div>
+<div class="row"><span>Seção final sugerida</span><strong class="big" id="secFinal"></strong></div>
+<div class="row"><span>Disjuntor de referência</span><strong id="disj"></strong></div>
+<div class="row"><span>PE (referência)</span><strong id="pe"></strong></div>
+<div class="row"><span>Capacidade corrigida do cabo</span><strong id="cap"></strong></div>
+<div class="row"><span>Relação Ib ≤ Iz</span><strong id="relacao"></strong></div>
+<div class="row"><span>Queda calculada</span><strong id="queda"></strong></div>
+<p class="note" id="explica"></p>
+<button class="secondary" onclick="window.print()">IMPRIMIR / SALVAR PDF</button>
+</section>
+
+<section class="card" id="manual">
+<h2>📘 ABNT NBR 5410 — Instalações elétricas de baixa tensão</h2>
+<p>Consulte a edição vigente da norma para verificar os requisitos aplicáveis ao projeto e à execução de instalações elétricas de baixa tensão, incluindo proteção contra choques e sobrecorrentes, dimensionamento de condutores, queda de tensão, aterramento e seleção dos componentes.</p>
+<p class="note">O texto integral é protegido por direitos autorais e não está reproduzido neste aplicativo. O acesso à norma depende das condições da plataforma externa. Os resultados desta calculadora são apenas referências simplificadas e não substituem a verificação da edição vigente por profissional qualificado.</p>
+<a class="manual-link" href="https://www.normas.com.br/visualizar/abnt-nbr-nm/23327/abnt-nbr5410-instalacoes-eletricas-de-baixa-tensao" target="_blank" rel="noopener noreferrer">Consultar ABNT NBR 5410 na Target Normas</a>
+</section>
+
+<section class="card">
+<h2>⚠️ Importante</h2>
+<p class="note">Esta primeira versão é uma calculadora auxiliar. Ela não substitui projeto, inspeção em campo, tabelas completas de capacidade de condução, curto-circuito, coordenação/proteção, dimensionamento de alimentadores, demanda ou verificação profissional. Os valores de ampacidade usados aqui são deliberadamente conservadores e simplificados para protótipo.</p>
+<p class="note">Base normativa de referência: ABNT NBR 5410 — Instalações elétricas de baixa tensão. Consulte a edição vigente e as tabelas aplicáveis ao método real de instalação.</p>
+</section>
+</main>
+<script>
+let promptInstalacao=null;
+const installButton=document.getElementById('installButton');
+function instalacaoNativa(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}
+function instalarApp(){
+ if(promptInstalacao){
+  promptInstalacao.prompt();
+  promptInstalacao.userChoice.then(()=>{promptInstalacao=null;});
+  return;
+ }
+ alert('A instalação automática não está disponível neste navegador. No Android, use o menu do navegador para “Instalar app” ou “Adicionar à tela inicial”.');
+}
+window.addEventListener('beforeinstallprompt',event=>{
+ event.preventDefault();
+ promptInstalacao=event;
+ installButton.textContent='Instalar app';
+});
+window.addEventListener('appinstalled',()=>{
+ promptInstalacao=null;
+ installButton.hidden=true;
+});
+if(instalacaoNativa())installButton.hidden=true;
+if('serviceWorker' in navigator&&window.isSecureContext){
+ window.addEventListener('load',()=>{
+  navigator.serviceWorker.register('./sw.js').catch(error=>{
+   console.error('Não foi possível ativar o modo offline:',error);
+  });
+ });
+}
+const secoes=[1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240];
+const ampCuPVC={
+ B1:{2:[17.5,24,32,41,57,76,101,125,150,192,232,269,309,353,415],3:[15.5,21,28,36,50,68,89,110,133,171,207,239,275,314,370]},
+ C:{2:[19.5,27,36,46,63,85,112,138,168,213,258,299,344,392,461],3:[17.5,24,32,41,57,76,96,119,144,184,223,259,299,341,403]}
+};
+const ampCuXLPE={
+ B1:{2:[18,25,33,45,61,80,107,134,161,212,258,294,339,390,459],3:[16,22,30,40,54,71,96,119,144,190,232,264,305,351,413]},
+ C:{2:[23,32,42,54,73,98,131,162,193,254,310,355,409,470,553],3:[20,28,36,49,66,89,119,147,175,230,281,322,371,426,501]}
+};
+function corrente(p,v,fp,s){return s==='tri'?p/(Math.sqrt(3)*v*fp):p/(v*fp)}
+function rho(mat){return mat==='al'?0.0285:0.0175}
+function quedaPct(I,L,V,A,mat,s){return I*(rho(mat)*2*L/A)/(s==='tri'?V*Math.sqrt(3):V)*100}
+function tempFactor(t,isol){
+ if(isol==='PVC'){if(t<=30)return 1;if(t<=35)return .94;if(t<=40)return .87;if(t<=45)return .79;if(t<=50)return .71;if(t<=55)return .61;if(t<=60)return .5}
+ else {if(t<=30)return 1;if(t<=35)return .96;if(t<=40)return .91;if(t<=45)return .87;if(t<=50)return .82;if(t<=55)return .76;if(t<=60)return .71}
+ return .5
+}
+function calcular(){
+ let p=+pot.value,v=+volt.value,d=+(dist2.value||dist.value),fpv=+fp.value,fc=+fator.value,lim=+quedaMax.value,t=+temp.value,ag=+agrup.value;
+ if(!p||!v||!d||fpv<=0||fc<=0){alert('Preencha potência, tensão, distância, FP e fatores corretamente.');return}
+ let s=sistema.value,n=+carreg.value,isolv=isol.value;
+ let ibv=corrente(p,v,fpv,s);
+ let base=(isolv==='PVC'?ampCuPVC:ampCuXLPE)[metodo.value][n];
+ let ft=tempFactor(t,isolv), fatorTotal=fc*ag*ft;
+ let amps=base.map(x=>x*fatorTotal);
+ let idx=amps.findIndex(x=>x>=ibv);if(idx<0)idx=amps.length-1;
+ let secA=secoes[idx];
+ let idxQ=secoes.findIndex(a=>quedaPct(ibv,d,v,a,material.value,s)<=lim);if(idxQ<0)idxQ=secoes.length-1;
+ let secQ=secoes[idxQ],final=Math.max(secA,secQ),capFinal=amps[secoes.indexOf(final)];
+ let disjs=[6,10,13,16,20,25,32,40,50,63,80,100,125,160];
+ let dj=disjs.find(x=>x>=ibv)||160;
+ if(dj>capFinal)dj=disjs.filter(x=>x<=capFinal).pop()||6;
+ let pe=final<=16?Math.max(2.5,final):final/2;
+ let q=quedaPct(ibv,d,v,final,material.value,s);
+ let ok=ibv<=capFinal && dj>=ibv && q<=lim;
+ resultado.style.display='block';
+ ib.textContent=ibv.toFixed(2)+' A';secAmp.textContent=secA+' mm²';secQueda.textContent=secQ+' mm²';secFinal.textContent=final+' mm²';disj.textContent=dj+' A';pe.textContent=pe+' mm²';queda.textContent=q.toFixed(2)+' %';cap.textContent=capFinal.toFixed(1)+' A';relacao.textContent=ibv.toFixed(1)+' A ≤ '+capFinal.toFixed(1)+' A';
+ status.innerHTML=ok?'<span class="pill">✓ ATENDE AOS CRITÉRIOS SIMPLIFICADOS</span>':'<span class="pill warn">⚠ REQUER VERIFICAÇÃO</span>';
+ explica.textContent=`Critérios usados: capacidade de condução corrigida por temperatura, agrupamento e fator informado; queda de tensão; e seleção de disjuntor sem exceder a capacidade corrigida do condutor. Para execução, ainda devem ser verificadas as demais condições normativas e características reais da instalação.`;
+ window.scrollTo({top:resultado.offsetTop-70,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
